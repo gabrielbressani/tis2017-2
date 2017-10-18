@@ -325,7 +325,7 @@
             <div class="col-lg-3">
                 <div class="wrapper wrapper-content project-manager">
                     
-                    <button onclick="inciarLeilao()" class=" btn btn-sm btn-success col-md-12 m-b-sm">
+                    <button id="iniciar-leilao" onclick="inciarLeilao()" class=" btn btn-sm btn-success col-md-12 m-b-sm">
                         Iniciar leilão
                     </button>   
                     <hr>
@@ -433,16 +433,54 @@
             $("#titulo-do-projeto")
                 .html(projetoJson.TituloDoProjeto);
 
-            $("#status-do-projeto")
-                .addClass('label-info')
-                    .html(projetoJson.Status);
-
             $("#data-de-criacao-do-projeto")
                 .html(projetoJson.DataDeCadastro);
 
             $("#resumo-do-projeto")
                 .html(projetoJson.ResumoDoProjeto);
 
+            atualizarPrioridade(projetoJson);
+
+            atualizarCategorias(projetoJson);
+
+            atualizarTabelaDeRequisitos(projetoJson);
+            
+            atualizarStatus(projetoJson);
+
+            $('.sk-loading').removeClass('sk-loading');
+        }
+
+        function atualizarStatus(projetoJson)
+        {
+            $("#status-do-projeto").html(projetoJson.Status);
+
+            if(projetoJson.Status == 'Em Elaboração')
+            {
+                $("#status-do-projeto").addClass('label-info');
+            }
+            else if(projetoJson.Status == 'Disponível Para Lance')
+            {
+                $("#status-do-projeto").removeClass('label-info');
+                $("#status-do-projeto").addClass('label-warning');
+                
+                $("#iniciar-leilao").hide();
+
+                $("#lances-do-projeto-tab").addClass('active');
+                $("#lances-do-projeto-content").addClass('active');
+
+                $("#requisitos-do-projeto-tab").removeClass('active');
+                $("#requisitos-do-projeto-content").removeClass('active');
+
+                $("#lances-do-projeto-tab").show();
+                $("#lances-do-projeto-content").show();
+
+                $("#linha-de-adicao-de-requisitos").remove();
+            $('.js-excluir').remove();
+            }
+        }
+
+        function atualizarPrioridade(projetoJson)
+        {
             if(projetoJson.Prioridade == 'Baixa')
             {
                 $("#prioridade-do-projeto")
@@ -458,10 +496,6 @@
                 $("#prioridade-do-projeto")
                     .html("<i class='fa fa-circle text-danger'></i> Prioridade Alta")
             }
-            
-            atualizarCategorias(projetoJson);
-            atualizarTabelaDeRequisitos(projetoJson);
-            $('.sk-loading').removeClass('sk-loading');
         }
 
         function atualizarCategorias(projetoJson)
@@ -555,18 +589,16 @@
 
         function inciarLeilao()
         {
-            $("#lances-do-projeto-tab").addClass('active');
-            $("#lances-do-projeto-content").addClass('active');
-
-            $("#requisitos-do-projeto-tab").removeClass('active');
-            $("#requisitos-do-projeto-content").removeClass('active');
-
-            $("#lances-do-projeto-tab").show();
-            $("#lances-do-projeto-content").show();
-
-            $("#linha-de-adicao-de-requisitos").remove();
-            $('.js-excluir').remove();
+            projetoCorrente.Status = "Disponível Para Lance"
             
+            var updates = {};
+            
+            updates['/Projeto/' + idDoProjetoCorrente] = projetoCorrente;
+            
+            database.ref().update(updates);
+
+            atualizarStatus(projetoCorrente);
+
             toastr.success('O seu leilão começou!', 'Ótimo!');
         }
     </script>
