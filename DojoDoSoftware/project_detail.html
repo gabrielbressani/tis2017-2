@@ -325,7 +325,7 @@
             <div class="col-lg-3">
                 <div class="wrapper wrapper-content project-manager">
                     
-                    <button id="iniciar-leilao" onclick="inciarLeilao()" class=" btn btn-sm btn-success col-md-12 m-b-sm">
+                    <button id="iniciar-leilao" onclick="inciarLeilao()" style="display: none" class=" btn btn-sm btn-success col-md-12 m-b-sm">
                         Iniciar leilão
                     </button>   
                     <hr>
@@ -457,6 +457,8 @@
             if(projetoJson.Status == 'Em Elaboração')
             {
                 $("#status-do-projeto").addClass('label-info');
+
+                $("#iniciar-leilao").show();
             }
             else if(projetoJson.Status == 'Disponível Para Lance')
             {

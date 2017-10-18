@@ -271,62 +271,64 @@
                         </div>
 
                         <div class="modal-body">
-                            <div role="form">
-                                <div class="form-group">
-                                    <label>
-                                        Título
-                                    </label> 
-                                    <input id="titulo-do-projeto" type="text" class="form-control">
-                                </div>
-
-                                <div class="form-group">
-                                    <label>
-                                        Resumo
-                                    </label> 
-                                    <textarea id="resumo-do-projeto" class="form-control"></textarea>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>
-                                        Categorias
-                                    </label>
-                                    <div>
-                                        <select data-placeholder=" " class="chosen-select" multiple style="width:350px;" tabindex="4">
-                                            <option value="AngularJS">AngularJS</option>
-                                            <option value="CSS">CSS</option>
-                                            <option value="FireBase">FireBase</option>
-                                            <option value="HTML">HTML</option>
-                                            <option value="Java">Java</option>
-                                            <option value="JavaScript">JavaScript</option>
-                                            <option value="NodeJS">NodeJS</option>
-                                        </select>
+                            <form>
+                                <div role="form">
+                                    <div class="form-group">
+                                        <label>
+                                            Título
+                                        </label> 
+                                        <input id="titulo-do-projeto" type="text" name="titulo" class="form-control">
                                     </div>
-                                </div>
 
-                                <p style="max-width: 100%; margin-bottom: 7px; font-weight: 700;">
-                                    Prioridade
-                                </p>
-                                <div class="radio radio-success radio-inline">
-                                    <input type="radio" id="inlineRadio1" value="Baixa" name="prioridade" checked="">
-                                    <label for="inlineRadio1"> 
-                                        Baixa
-                                    </label>
-                                </div>
-                                <div class="radio radio-warning radio-inline">
-                                    <input type="radio" id="inlineRadio2" value="Media" name="prioridade">
-                                    <label for="inlineRadio2"> 
-                                        Média 
-                                    </label>
-                                </div>
-                                <div class="radio radio-danger radio-inline">
-                                    <input type="radio" id="inlineRadio3" value="Alta" name="prioridade">
-                                    <label for="inlineRadio3"> 
-                                        Alta
-                                    </label>
-                                </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Resumo
+                                        </label> 
+                                        <textarea id="resumo-do-projeto" name="resumo" class="form-control"></textarea>
+                                    </div>
 
-                                
-                            </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Categorias
+                                        </label>
+                                        <div>
+                                            <select data-placeholder=" " class="chosen-select" multiple style="width:350px;" tabindex="4">
+                                                <option value="AngularJS">AngularJS</option>
+                                                <option value="CSS">CSS</option>
+                                                <option value="FireBase">FireBase</option>
+                                                <option value="HTML">HTML</option>
+                                                <option value="Java">Java</option>
+                                                <option value="JavaScript">JavaScript</option>
+                                                <option value="NodeJS">NodeJS</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <p style="max-width: 100%; margin-bottom: 7px; font-weight: 700;">
+                                        Prioridade
+                                    </p>
+                                    <div class="radio radio-success radio-inline">
+                                        <input type="radio" id="inlineRadio1" value="Baixa" name="prioridade" checked="">
+                                        <label for="inlineRadio1"> 
+                                            Baixa
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-warning radio-inline">
+                                        <input type="radio" id="inlineRadio2" value="Media" name="prioridade">
+                                        <label for="inlineRadio2"> 
+                                            Média 
+                                        </label>
+                                    </div>
+                                    <div class="radio radio-danger radio-inline">
+                                        <input type="radio" id="inlineRadio3" value="Alta" name="prioridade">
+                                        <label for="inlineRadio3"> 
+                                            Alta
+                                        </label>
+                                    </div>
+
+                                    
+                                </div>
+                            </form>
                         </div>
 
                         <div class="modal-footer">
@@ -372,9 +374,11 @@
     <!-- Chosen -->
     <script src="js/plugins/chosen/chosen.jquery.js"></script>
 
+    <!-- Jquery Validate -->
+    <script src="js/plugins/validate/jquery.validate.min.js"></script>
+
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase.js"></script>
-
     <script>
 
         var config = 
@@ -393,6 +397,7 @@
 
         $(function (){
             configuracoesIniciaisDaTela();
+         
             $("#salvar-novo-projeto").on("click", salvarNovoProjetoAPartirDoUltimoId);
             $("#fechar-modal-de-novo-projeto").on("click", limparCamposDoModalDeNovoProjeto);
         })
@@ -405,6 +410,7 @@
 
         function salvarNovoProjetoAPartirDoUltimoId()
         {
+
             var proximoId = 0;
 
             firebase.database().ref('/Projeto').once('value').then(
@@ -427,6 +433,32 @@
             var participantes = [{}]
             var prioridade = $("[name=prioridade]:checked").val()
 
+            var estaValido = true;
+
+            if (tituloDoProjeto == '')
+            {
+                $("#titulo-do-projeto")
+                    .addClass('error')
+                    .parent('div')
+                        .append('<label id="number-error" class="error" for="number">Este campo é obrigatório.</label>');
+
+                estaValido = false
+            }
+
+            if(resumoDoProjeto == '')
+            {
+                $("#resumo-do-projeto")
+                    .addClass('error')
+                    .parent('div')
+                        .append('<label id="number-error" class="error" for="number">Este campo é obrigatório.</label>');
+                
+                estaValido = false
+            }
+            
+            if (!estaValido) 
+            {
+                return;
+            }
 
             var categorias = '[';
 
