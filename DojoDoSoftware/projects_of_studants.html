@@ -33,12 +33,13 @@
         <div class="sidebar-collapse">
             <ul class="nav metismenu" id="side-menu">
                 <li class="nav-header">
-                    <div class="dropdown profile-element"> <span>
-                            <img alt="image" class="img-circle" src="img/logo.png" />
-                             </span>
+                    <div class="dropdown profile-element"> 
+                        <span>
+                            <img alt="image" class="img-circle" src="img/a4.jpg" style="width: 50px;">
+                        </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                             <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">
-                                InfinityWare
+                                Betão
                             </strong>
                              </span> <span class="text-muted text-xs block">Configurações <b class="caret"></b></span> </span> </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
@@ -62,7 +63,7 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="projects.html">
+                    <a href="projects_of_studants.html">
                         <i class="fa fa-cube"></i> 
                         <span class="nav-label">
                             Projetos
@@ -117,12 +118,6 @@
                     <div class="ibox">
                         <div class="ibox-title">
                             <h5></h5>
-                            <div class="ibox-tools">
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" 
-                                    data-target="#iniciar-um-novo-projeto">
-                                    Iniciar um novo Projeto
-                                </button>
-                            </div>
                         </div>
                         <div class="ibox-content">
                             <div class="row m-b-sm m-t-sm">
@@ -426,7 +421,7 @@
             limparCamposDoModalDeNovoProjeto();
 
             
-                window.location.href = "project_detail.html";
+                window.location.href = "project_detail_of_students.html";
             
         }
 
@@ -456,14 +451,17 @@
                     {
                         var  projetoDoContexto = snapshot.val()[i];
 
-                        localStorage.setItem("idDoProjeto", i);
-                        $("#status-projeto-template").html(projetoDoContexto.Status);
-                        $("#nome-do-projeto").html(projetoDoContexto.TituloDoProjeto);
-                        $("#data-de-criacao").html(projetoDoContexto.DataDeCadastro);
-                        $("#link-de-edicao-de-projeto").attr("data-id-do-projeto", i)
+                        if(projetoDoContexto.Status == "Disponível Para Lance")
+                        {
+                            localStorage.setItem("idDoProjeto", i);
+                            $("#status-projeto-template").html(projetoDoContexto.Status);
+                            $("#nome-do-projeto").html(projetoDoContexto.TituloDoProjeto);
+                            $("#data-de-criacao").html(projetoDoContexto.DataDeCadastro);
+                            $("#link-de-edicao-de-projeto").attr("data-id-do-projeto", i)
 
-                        var htmlDoTemplate = '<tr>' + $("#linha-template").html() + '</tr>';
-                        $("#listagem-de-projetos").append(htmlDoTemplate);
+                            var htmlDoTemplate = '<tr>' + $("#linha-template").html() + '</tr>';
+                            $("#listagem-de-projetos").append(htmlDoTemplate);
+                        }
                     }
                 });
         }
@@ -474,7 +472,7 @@
 
             localStorage.setItem("idDoProjeto", $elemento.data("id-do-projeto"));
 
-            window.location.href = '/home/gabrielbressani/Documents/TIS/DojoDoSoftware/project_detail.html'
+            window.location.href = '/home/gabrielbressani/Documents/TIS/DojoDoSoftware/project_detail_of_students.html'
         }
     </script>
 </body>
